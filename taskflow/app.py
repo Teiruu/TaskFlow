@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, flash, url_for, session, logging
 from model.db import db
-from taskflow.model.user import Register, User
+from taskflow.model.user import Register, User, LoginForm
+from flask_login import LoginManager
 
 app = Flask(__name__)
 # configure the SQLite database, relative to the app instance folder
@@ -8,7 +9,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 # initialize the app with the extension
 db.init_app(app)
 app.config.from_pyfile('instance/config.py')
-
 with app.app_context():
     db.create_all()
 
@@ -24,13 +24,23 @@ def register():
             username=form.username.data,
             password=form.password.data
         )
+        #Adds user to the DB
         db.session.add(user)
         db.session.commit()
+
+        return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-@app.route("/auth/login")
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+
+    login_form = LoginForm()
+
+    #Allow login if validation success
+    if login_form.validate_on_submit():
+        return "Login Successful"
+
+    return render_template('login.html', form=login_form)
 
 @app.route("/auth/logout")
 def logout():
