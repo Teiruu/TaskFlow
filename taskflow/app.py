@@ -16,7 +16,7 @@ with app.app_context():
 def base():
     return render_template('base.html')
 
-@app.route("/auth/register", methods=['GET', 'POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
     form = Register()
     if form.validate_on_submit():
@@ -33,16 +33,17 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect(url_for('dashboard'))
+    return render_template('login.html', form=form)
 
-    login_form = LoginForm()
-
-    #Allow login if validation success
-    if login_form.validate_on_submit():
-        return "Login Successful"
-
-    return render_template('login.html', form=login_form)
-
-@app.route("/auth/logout")
+@app.route("/logout", methods=['POST'])
 def logout():
+    session.clear()
     return redirect(url_for('base'))
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template('dashboard.html')
 

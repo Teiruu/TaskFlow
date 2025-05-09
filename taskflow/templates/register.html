@@ -3,26 +3,38 @@
 
 <head>
     <title>Register</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
     <div class="main">
         <h3>Enter a Username and Password</h3>
 
-        <form action="">
-            <label for="first">
+        <form action="{{ url_for('register') }}" method="POST">
+            <label for="username">
                 Username:
             </label>
-            <input type="text" id="first" name="first"
+            <input type="text" id="username" name="username"
                 placeholder="Enter your Username" required>
-
+            {% if form.username.errors %}
+                <ul class="errors">
+                {% for error in form.username.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
             <label for="password">
                 Password:
             </label>
             <input type="password" id="password" name="password"
                 placeholder="Enter your Password" required>
-
+            {% if form.password.errors %}
+                <ul class="errors">
+                {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                 </ul>
+            {% endif %}
             <div class="wrap">
                 <button type="submit">
                     Submit
