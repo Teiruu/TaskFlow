@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .message {
-            margin-top: 150px;
-            text-align: center;
-            font-size: 24px;
-            color: #4CAF50;
-        }
-    </style>
+    <title>Task Scheduler</title>
 </head>
 <body>
+    <header>
+        <h1>{{ session.username.capitalize() }}'s Task Scheduler</h1>
+    </header>
+    <main>
     <form action="{{ url_for('logout') }}" method="post">
         <button type="submit" class="logout-btn">Log Out</button>
     </form>
-
-    <div class="message">
-        Login successful!
-    </div>
+        <div class="task-form">
+            <input type="text" id="task" placeholder="Enter task...">
+            <select id="priority">
+                <option value="top">Top Priority</option>
+                <option value="middle">Middle Priority</option>
+                <option value="low">Less Priority</option>
+            </select>
+            <input type="date" id="deadline">
+            <button id="add-task">Add Task</button>
+        </div>
+        <div class="task-list" id="task-list">
+            <!-- Tasks will be added here dynamically -->
+        </div>
+        <script src="logic.js"></script>
+    </main>
 </body>
+
 </html>

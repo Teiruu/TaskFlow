@@ -1,65 +1,165 @@
 /*style.css*/
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: sans-serif;
-    line-height: 1.5;
-    min-height: 100vh;
-    background: #f3f3f3;
-    flex-direction: column;
+/* --------------------------------------------------
+   Global colour system
+   -------------------------------------------------- */
+:root {
+    /* brand colour – “royal-blue” */
+    --primary-color: #4169e1;   /* RoyalBlue */
+    --primary-color-hover: #3557c6; /* a bit darker for hover/active */
+
+    /* light-theme neutrals */
+    --bg-color: #f3f3f3;
+    --card-bg: #ffffff;
+    --text-color: #222222;
+    --input-border: #dddddd;
+}
+
+/* Dark-mode – automatically applied when the user/OS prefers dark */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-color: #e0e0e0;
+        --input-border: #333333;
+    }
+}
+
+/* --------------------------------------------------
+   Basic layout & typography
+   -------------------------------------------------- */
+html, body {
+    height: 100%;
     margin: 0;
 }
 
-.main {
-    background-color: #fff;
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: sans-serif;
+    line-height: 1.5;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+    margin: 0 0 0.6em 0;
+}
+
+/* --------------------------------------------------
+   Containers / cards
+   -------------------------------------------------- */
+.main, .task-form {
+    background-color: var(--card-bg);
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    transition: transform 0.2s;
-    width: 500px;
+    padding: 32px 24px;
+    width: 100%;
+    max-width: 500px;
     text-align: center;
 }
 
-h1 {
-    color: #4CAF50;
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 100px auto 0 auto;
 }
 
+/* --------------------------------------------------
+   Form elements
+   -------------------------------------------------- */
 label {
     display: block;
     width: 100%;
-    margin-top: 10px;
-    margin-bottom: 5px;
+    margin: 10px 0 5px;
     text-align: left;
-    color: #555;
+    color: var(--text-color);
     font-weight: bold;
 }
 
-input {
-    display: block;
+input[type="text"],
+input[type="password"],
+input[type="date"],
+select {
     width: 100%;
     margin-bottom: 15px;
     padding: 10px;
     box-sizing: border-box;
-    border: 1px solid #ddd;
+    border: 1px solid var(--input-border);
     border-radius: 5px;
+    background: var(--card-bg);
+    color: var(--text-color);
 }
 
+/* --------------------------------------------------
+   Buttons
+   -------------------------------------------------- */
 button {
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    border: none;
-    color: white;
-    cursor: pointer;
-    background-color: #4CAF50;
+    display: inline-block;
     width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    margin: 15px 0;
+    background-color: var(--primary-color);
+    color: #ffffff;
     font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, transform 0.1s ease-in-out;
 }
 
+button:hover,
+button:focus {
+    background-color: var(--primary-color-hover);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* smaller utility button (e.g., logout) */
+.logout-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: auto !important;
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+/* --------------------------------------------------
+   Header alignment helpers
+   -------------------------------------------------- */
+header {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+}
+
+/* --------------------------------------------------
+   Misc helpers
+   -------------------------------------------------- */
 .wrap {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.errors {
+    color: crimson;
+    margin: 0 0 0.5em 0;
+    padding-left: 1em;
+    text-align: left;
+}
+
+/* anchor inherits brand colour */
+a {
+    color: var(--primary-color);
 }
