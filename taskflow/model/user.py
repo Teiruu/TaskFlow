@@ -1,8 +1,12 @@
-from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+import datetime
+
+from typing import List
+from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from model.db import db
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, SelectField
+from wtforms.fields.datetime import DateField
 from wtforms.widgets import PasswordInput
 from wtforms.validators import DataRequired, ValidationError, InputRequired, Length, EqualTo
 
@@ -18,11 +22,21 @@ def invalid_credentials(form, field):
         raise ValidationError('Username or password is incorrect')
 
 
-# class for the database
+# class for the database username
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
+    todos: Mapped[List["Todo"]] = relationship()
     username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str] = mapped_column()
+
+#class for the database to-do
+class Todo(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    todo_text: Mapped[str] = mapped_column()
+    todo_priority: Mapped[int] = mapped_column()
+    todo_date: Mapped[datetime.datetime] = mapped_column()
+
 
 # class for the register form
 class Register(FlaskForm):
@@ -39,3 +53,11 @@ class LoginForm(FlaskForm):
                            validators=[InputRequired(message="Username required")])
     password = StringField('password_label',
                            validators=[InputRequired(message="Password required"), invalid_credentials])
+
+#class for the todo form
+class TodoForm(FlaskForm):
+    todo = StringField('todo_label',
+                           validators=[InputRequired(message="Input required")])
+    priority = SelectField('priority_label',
+                           choices={1: "top", 2: "middle", 3: "less"},
+    date = DateField('date_label', format='%Y-%m-%d'))

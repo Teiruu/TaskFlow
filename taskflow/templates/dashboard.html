@@ -8,28 +8,32 @@
     <title>Task Scheduler</title>
 </head>
 <body>
-    <header>
-        <h1>{{ session.username.capitalize() }}'s Task Scheduler</h1>
-    </header>
-    <main>
+<header>
+    <h1>{{ session.username.capitalize() }}'s Task Scheduler</h1>
+</header>
+<main>
     <form action="{{ url_for('logout') }}" method="post">
         <button type="submit" class="logout-btn">Log Out</button>
     </form>
-        <div class="task-form">
-            <input type="text" id="task" placeholder="Enter task...">
-            <select id="priority">
-                <option value="top">Top Priority</option>
-                <option value="middle">Middle Priority</option>
-                <option value="low">Less Priority</option>
+    <div class="task-form">
+        <form action="{{ url_for('dashboard') }}" method="post">
+            <input type="text" id="task" name="text" placeholder="Enter task...">
+            <select id="priority" name="priority">
+                <option value="1">Top Priority</option>
+                <option value="2">Middle Priority</option>
+                <option value="3">Less Priority</option>
             </select>
-            <input type="date" id="deadline">
-            <button id="add-task">Add Task</button>
-        </div>
-        <div class="task-list" id="task-list">
-            <!-- Tasks will be added here dynamically -->
-        </div>
-        <script src="logic.js"></script>
-    </main>
+            <input type="date" id="deadline" name="date">
+            <button id="add-task" type="submit">Add Task</button>
+        </form>
+    </div>
+    <div class="task-list" id="task-list" name="task-list">
+                <!-- Tasks will be added here dynamically -->
+        {% for todo in todos %}
+        <li>{{ todo.todo_text }}</li>
+        {% endfor %}
+    </div>
+</main>
 </body>
 
 </html>

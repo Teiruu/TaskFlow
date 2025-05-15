@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, request, flash, url_for, session, logging
 from flask_session import Session
 from model.db import db
-from taskflow.model.user import Register, User, LoginForm
+from taskflow.model.user import Register, User, LoginForm, TodoForm, Todo
 from flask_login import LoginManager
 
 app = Flask(__name__)
@@ -52,9 +52,20 @@ def logout():
     session.clear()
     return redirect(url_for('base'))
 
-@app.route("/dashboard")
+@app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
     if not session.get("username"):
         return redirect("/login")
-    return render_template('dashboard.html')
+    form = TodoForm()
+    if form.validate_on_submit():
+        todo = Todo(
+        todo_text = form.todo_text.data,
+        todo_priority = form.todo_priority.data,
+        todo_date = form.todo_date.data
+        )
+    #Adding the task to the list
+        db.session.add(todo)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+    return render_template('dashboard.html', form=form)
 
