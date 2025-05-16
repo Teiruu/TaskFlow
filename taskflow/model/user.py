@@ -59,5 +59,5 @@ class TodoForm(FlaskForm):
     todo = StringField('todo_label',
                            validators=[InputRequired(message="Input required")])
     priority = SelectField('priority_label',
-                           choices={1: "top", 2: "middle", 3: "less"},
-    date = DateField('date_label', format='%Y-%m-%d'))
+                           choices=[(1, 'Top'), (2, 'Middle'), (3, 'Less')])
+    date = DateField('date_label', format='%Y-%m-%d')

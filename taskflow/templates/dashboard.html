@@ -15,9 +15,14 @@
     <form action="{{ url_for('logout') }}" method="post">
         <button type="submit" class="logout-btn">Log Out</button>
     </form>
-    <div class="task-form">
+
+<div class="dashboard-container">
+    <!-- Task Form -->
+    <div class="task-entry">
+        <h2>Input Tasks Here</h2>
         <form action="{{ url_for('dashboard') }}" method="post">
-            <input type="text" id="task" name="text" placeholder="Enter task...">
+            {{ form.csrf_token }}
+            <input type="text" id="task" name="todo" placeholder="Enter task...">
             <select id="priority" name="priority">
                 <option value="1">Top Priority</option>
                 <option value="2">Middle Priority</option>
@@ -27,12 +32,31 @@
             <button id="add-task" type="submit">Add Task</button>
         </form>
     </div>
-    <div class="task-list" id="task-list" name="task-list">
-                <!-- Tasks will be added here dynamically -->
-        {% for todo in todos %}
-        <li>{{ todo.todo_text }}</li>
-        {% endfor %}
+
+    <!-- Task Table -->
+    <div class="task-table">
+        <h2>Your Tasks</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Priority</th>
+                    <th>Deadline</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set priorities = {1:"Top Priority", 2: "Middle Priority", 3: "Least Priority"} %}
+                {% for todo in todos %}
+                <tr>
+                    <td>{{ todo.todo_text }}</td>
+                    <td>{{ priorities[todo.todo_priority] }}</td>
+                    <td>{{ todo.todo_date.strftime("%d %B %Y") }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+</div>
 </main>
 </body>
 

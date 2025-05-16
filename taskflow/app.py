@@ -57,15 +57,18 @@ def dashboard():
     if not session.get("username"):
         return redirect("/login")
     form = TodoForm()
+    user = db.session.execute(db.select(User).filter_by(username=session.get("username"))).scalar_one()
     if form.validate_on_submit():
         todo = Todo(
-        todo_text = form.todo_text.data,
-        todo_priority = form.todo_priority.data,
-        todo_date = form.todo_date.data
+        user_id = user.id,
+        todo_text = form.todo.data,
+        todo_priority = form.priority.data,
+        todo_date = form.date.data
         )
     #Adding the task to the list
         db.session.add(todo)
         db.session.commit()
         return redirect(url_for('dashboard'))
-    return render_template('dashboard.html', form=form)
+    todos = db.session.execute(db.select(Todo).filter_by(user_id=user.id).order_by(Todo.todo_date)).scalars()
+    return render_template('dashboard.html', form=form, todos=todos)
 
