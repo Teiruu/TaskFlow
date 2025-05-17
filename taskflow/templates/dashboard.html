@@ -16,9 +16,8 @@
         <button type="submit" class="logout-btn">Log Out</button>
     </form>
 
-<div class="dashboard-container">
-    <!-- Task Form -->
-    <div class="task-entry">
+    <!-- Task input -->
+    <div class="task-entry centered">
         <h2>Input Tasks Here</h2>
         <form action="{{ url_for('dashboard') }}" method="post">
             {{ form.csrf_token }}
@@ -33,30 +32,42 @@
         </form>
     </div>
 
-    <!-- Task Table -->
+    <!-- Task table -->
     <div class="task-table">
         <h2>Your Tasks</h2>
         <table>
             <thead>
-                <tr>
-                    <th>Task</th>
-                    <th>Priority</th>
-                    <th>Deadline</th>
-                </tr>
+            <tr>
+                <th>✔</th>
+                <th>Task</th>
+                <th>Priority</th>
+                <th>Deadline</th>
+                <th>Actions</th>
+            </tr>
             </thead>
             <tbody>
-                {% set priorities = {1:"Top Priority", 2: "Middle Priority", 3: "Least Priority"} %}
-                {% for todo in todos %}
-                <tr>
-                    <td>{{ todo.todo_text }}</td>
-                    <td>{{ priorities[todo.todo_priority] }}</td>
-                    <td>{{ todo.todo_date.strftime("%d %B %Y") }}</td>
-                </tr>
-                {% endfor %}
+            {% set priorities = {1:"Top Priority", 2: "Middle Priority", 3: "Least Priority"} %}
+            {% for todo in todos %}
+            <tr>
+                <td>
+                    <form action="{{ url_for('update', id=todo.id) }}" method="post" style="display:inline;">
+                        {{ form.csrf_token }}
+                        <input Onchange= "this.form.submit();" type="checkbox" {% if todo.completed %}checked{% endif %}></form>
+                </td>
+                <td>{{ todo.todo_text }}</td>
+                <td>{{ priorities[todo.todo_priority] }}</td>
+                <td>{{ todo.todo_date.strftime("%d %B %Y") }}</td>
+                <td>
+                    <form action="{{ url_for('delete', id=todo.id) }}" method="post" style="display:inline;">
+                        {{ form.csrf_token }}
+                        <button class="delete-btn" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
-</div>
 </main>
 </body>
 

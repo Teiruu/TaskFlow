@@ -168,6 +168,46 @@ select {
     color: var(--text-color);
 }
 
+/* Center the form entry on top */
+.centered {
+    margin: 0 auto 40px auto;
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Task Table Action Buttons */
+.edit-btn,
+.delete-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+    margin-right: 5px;
+    cursor: pointer;
+    border: none;
+    color: white;
+}
+
+.edit-btn {
+    background-color: #4caf50;
+}
+
+.edit-btn:hover {
+    background-color: #3e8e41;
+}
+
+.delete-btn {
+    background-color: #e53935;
+}
+
+.delete-btn:hover {
+    background-color: #c62828;
+}
+
+.task-table td input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
 /* --------------------------------------------------
    Buttons
    -------------------------------------------------- */

@@ -63,7 +63,8 @@ def dashboard():
         user_id = user.id,
         todo_text = form.todo.data,
         todo_priority = form.priority.data,
-        todo_date = form.date.data
+        todo_date = form.date.data,
+        completed = False
         )
     #Adding the task to the list
         db.session.add(todo)
@@ -72,3 +73,19 @@ def dashboard():
     todos = db.session.execute(db.select(Todo).filter_by(user_id=user.id).order_by(Todo.todo_date)).scalars()
     return render_template('dashboard.html', form=form, todos=todos)
 
+# Update task status
+@app.route("/dashboard/update/<int:id>", methods=["POST"])
+def update(id):
+    todo = db.session.execute(db.select(Todo).filter_by(id=id)).scalar_one()
+    todo.completed = not todo.completed
+    db.session.commit()
+    return redirect(url_for('dashboard'))
+
+@app.route("/dashboard/delete/<int:id>", methods=["POST"])
+def delete(id):
+    task = db.session.execute(db.select(Todo).filter_by(id=id)).scalar_one()
+    db.session.delete(task)
+    db.session.commit()
+    return redirect(url_for('dashboard'))
+
+#check if the task belongs to the logged in user for the update/delete routes, can delete
