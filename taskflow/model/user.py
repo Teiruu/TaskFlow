@@ -10,7 +10,7 @@ from wtforms.fields.datetime import DateField
 from wtforms.fields.simple import BooleanField
 from wtforms.widgets import PasswordInput
 from wtforms.validators import DataRequired, ValidationError, InputRequired, Length, EqualTo
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Username and Password Checker
 def invalid_credentials(form, field):
@@ -22,7 +22,7 @@ def invalid_credentials(form, field):
     user = db.session.execute(db.select(User).filter_by(username=username_entered)).scalar_one_or_none()
     if user is None:
         raise ValidationError('Username or password is incorrect')
-    elif password_entered != user.password:
+    elif not user.check_password(password_entered):
         raise ValidationError('Username or password is incorrect')
 
 
@@ -32,6 +32,11 @@ class User(db.Model):
     todos: Mapped[List["Todo"]] = relationship()
     username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str] = mapped_column()
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
 
 #class for the database to-do
@@ -73,4 +78,5 @@ class TodoForm(FlaskForm):
 
 class TodoAmend(FlaskForm):
     completed = BooleanField('checkbox_label')
+
 
